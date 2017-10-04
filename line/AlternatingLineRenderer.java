@@ -1,8 +1,8 @@
 package line;
 
 import geometry.Vertex3D;
-import notProvided.line.BresenhamLineRenderer;
-import notProvided.line.DDALineRenderer;
+import line.BresenhamLineRenderer;
+import line.DDALineRenderer;
 import windowing.drawable.Drawable;
 
 // Because we have the interface LineRenderer, this class is

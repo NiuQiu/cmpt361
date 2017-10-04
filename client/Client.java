@@ -5,17 +5,16 @@ import geometry.Point2D;
 import line.AlternatingLineRenderer;
 import line.ExpensiveLineRenderer;
 import line.LineRenderer;
-import notProvided.client.ColoredDrawable;
-import notProvided.client.testpages.MeshPolygonTest;
-import notProvided.client.testpages.ParallelogramTest;
-import notProvided.client.testpages.RandomLineTest;
+import windowing.drawable.ColoredDrawable;
+import client.testPages.*;
+/*import notProvided.client.testpages.MeshPolygonTest;
 import notProvided.client.testpages.RandomPolygonTest;
-import notProvided.client.testpages.StarburstPolygonTest;
-import notProvided.line.AntialiasingLineRenderer;
-import notProvided.line.BresenhamLineRenderer;
-import notProvided.line.DDALineRenderer;
-import notProvided.polygon.FilledPolygonRenderer;
-import notProvided.polygon.WireframePolygonRenderer;
+import notProvided.client.testpages.StarburstPolygonTest;*/
+import line.AntialiasingLineRenderer;
+import line.BresenhamLineRenderer;
+import line.DDALineRenderer;
+import polygon.FilledPolygonRenderer;
+//import notProvided.polygon.WireframePolygonRenderer;
 import polygon.PolygonRenderer;
 import windowing.PageTurner;
 import windowing.drawable.Drawable;
@@ -143,10 +142,10 @@ public class Client implements PageTurner {
 		for(Drawable panel: panels) {		// 'panels' necessary here.  Not panelArray, because clear() uses setPixel.
 			panel.clear();
 		}
-		new StarburstPolygonTest(panelArray[0], polygonRenderer);
+		/*new StarburstPolygonTest(panelArray[0], polygonRenderer);
 		new MeshPolygonTest(panelArray[1], polygonRenderer, MeshPolygonTest.NO_PERTURBATION);
 		new MeshPolygonTest(panelArray[2], polygonRenderer, MeshPolygonTest.USE_PERTURBATION);
-		new RandomPolygonTest(panelArray[3], polygonRenderer);
+		new RandomPolygonTest(panelArray[3], polygonRenderer);*/
 	}
 
 	private void defaultPage() {

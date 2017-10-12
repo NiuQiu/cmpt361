@@ -19,11 +19,11 @@ public class DDALineRenderer implements LineRenderer{
     @Override
     public void drawLine(Vertex3D p1, Vertex3D p2, Drawable panel) {
         double slope = Supplier.calculateSlope(p1, p2);
-        double finalValue = Supplier.calculateAbsValue(slope);
+        double finalSlope = Supplier.calculateAbsValue(slope);
 
         double intercept = p2.getIntY() - slope * p2.getIntX();
 
-        if(finalValue <= MIDANGLE){
+        if(finalSlope <= MIDANGLE){
             for (int x = p1.getIntX(); x <= p2.getIntX(); x++){
                 int y = Supplier.calculateY(slope, x, intercept);
                 panel.setPixel(x, y, p1.getZ(), p1.getColor().asARGB());

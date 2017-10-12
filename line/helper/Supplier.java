@@ -20,7 +20,7 @@ public class Supplier {
      * @param point
      * @return Vertex3D point
      */
-    public static Vertex3D swap(Vertex3D point){
+    public static Vertex3D swapXAndY(Vertex3D point){
         Point3DH temp = new Point3DH(point.getY(), point.getX(), point.getZ(), point.getPoint3D().getW());
         return point.replacePoint(temp);
     }

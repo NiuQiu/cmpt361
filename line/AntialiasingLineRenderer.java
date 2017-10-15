@@ -15,13 +15,7 @@ public class AntialiasingLineRenderer implements LineRenderer {
     private final static double RADIUS_SQUARED = Math.pow(Math.sqrt(2), 2);
     private final static double CIRCLE_AREA = Math.PI * RADIUS_SQUARED;
     private final static int MAX_DISTANCE = 1;
-    private final static int ANTIALIAS_RANGE = 3;
-
-    // If this value is 1 then there is no change
-    // If < 1 then the coverage is increased (Aliasing starts to show around 0.5)
-    // If > 1 then coverage is decreased (Image is nearly invisible at 1.6)
-    // Does not increase coverage of 0
-    private static final double COVERAGE_CHANGE = 1;
+    private final static int ANTIALIAS_RANGE = 1;
 
     @Override
     public void drawLine(Vertex3D p1, Vertex3D p2, Drawable panel) {
@@ -33,9 +27,6 @@ public class AntialiasingLineRenderer implements LineRenderer {
         for (int row = p1.getIntX(); row <= p2.getIntX(); row++) {
             for (int column = (int) (Math.round(currentColumn) - ANTIALIAS_RANGE); column <= Math.round(currentColumn) + ANTIALIAS_RANGE; column++) {
                 coverage = calculatePixelCoverage(p1, p2, row, column);
-                if (coverage != 0) {
-                    coverage = 1 - COVERAGE_CHANGE * (1 - coverage);
-                }
                 panel.setPixelWithCoverage(row, column, 0.0, color, coverage);
             }
             currentColumn += slope;
@@ -45,6 +36,16 @@ public class AntialiasingLineRenderer implements LineRenderer {
 
     public static LineRenderer make() {
         return new AnyOctantLineRenderer(new AntialiasingLineRenderer());
+    }
+
+    private double calculatePixelCoverage(Vertex3D p1, Vertex3D p2, int x, int y) {
+        double distance = getDistance(p1, p2, x, y);
+        if (distance > MAX_DISTANCE) {
+            return 0;
+        }
+        double angle = getAngle(distance);
+        double numerator = calculatePieWedge(angle) + calculateTriangle(distance);
+        return 1 - (numerator / CIRCLE_AREA);
     }
 
     /**
@@ -73,10 +74,10 @@ public class AntialiasingLineRenderer implements LineRenderer {
     private double getDistance(Vertex3D p1, Vertex3D p2, double x, double y) {
         double orthogonalX, orthogonalY;
 
-        // hypotenuse and opposite for [p1, (x,y)]
+        // adjacent and opposite for [p1, (x,y)]
         double A = x - p1.getX();
         double B = y - p1.getY();
-        // hypotenuse and opposite for [p1, p2]
+        // adjacent and opposite for [p1, p2]
         double C = Supplier.calculateDeltaX(p1, p2);
         double D = Supplier.calculateDeltaY(p1, p2);
 
@@ -108,16 +109,6 @@ public class AntialiasingLineRenderer implements LineRenderer {
         return Math.acos(distance / RADIUS);
     }
 
-    private double calculatePixelCoverage(Vertex3D p1, Vertex3D p2, int x, int y) {
-        double distance = getDistance(p1, p2, x, y);
-        if (distance > MAX_DISTANCE) {
-            return 0;
-        }
-        double angle = getAngle(distance);
-        double numerator = calculatePieWedge(angle) + calculateTriangle(distance);
-        return 1 - (numerator / CIRCLE_AREA);
-    }
-
     private double calculateTriangle(double distance) {
         return distance * Math.sqrt(RADIUS_SQUARED - Math.pow(distance, 2));
     }
@@ -126,6 +117,4 @@ public class AntialiasingLineRenderer implements LineRenderer {
         double radian = angle / Math.PI;
         return (1 - radian) * CIRCLE_AREA;
     }
-
-
 }

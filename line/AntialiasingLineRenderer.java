@@ -16,6 +16,7 @@ public class AntialiasingLineRenderer implements LineRenderer {
     private final static double CIRCLE_AREA = Math.PI * RADIUS_SQUARED;
     private final static int MAX_DISTANCE = 1;
     private final static int ANTIALIAS_RANGE = 1;
+    private final static double SLAB_HALF_HEIGHT = 0.5;
 
     @Override
     public void drawLine(Vertex3D p1, Vertex3D p2, Drawable panel) {
@@ -43,14 +44,14 @@ public class AntialiasingLineRenderer implements LineRenderer {
         if (distance > MAX_DISTANCE) {
             return 0;
         }
-        double angle = getAngle(distance);
+        double angle = getAngle(distance - SLAB_HALF_HEIGHT);
         double numerator = calculatePieWedge(angle) + calculateTriangle(distance);
         return 1 - (numerator / CIRCLE_AREA);
     }
 
     /**
      * This function use dot products to calculate the distance
-     * for {v1[p1, (x,y)], v2[p1, p2]} and {v1, v3}
+     * for (v1[p1, (x,y)], v2[p1, p2]) and (v1, v3)
      * Detail:
      * <p>
      * -- Step 1 --
@@ -98,6 +99,7 @@ public class AntialiasingLineRenderer implements LineRenderer {
             orthogonalX = p2.getX();
             orthogonalY = p2.getY();
         } else {
+            // get x and y values on axis
             orthogonalX = p1.getX() + ratio * C;
             orthogonalY = p1.getY() + ratio * D;
         }

@@ -40,11 +40,11 @@ public class AntialiasingLineRenderer implements LineRenderer {
     }
 
     private double calculatePixelCoverage(Vertex3D p1, Vertex3D p2, int x, int y) {
-        double distance = getDistance(p1, p2, x, y);
+        double distance = getDistance(p1, p2, x, y) - SLAB_HALF_HEIGHT;
         if (distance > MAX_DISTANCE) {
             return 0;
         }
-        double angle = getAngle(distance - SLAB_HALF_HEIGHT);
+        double angle = getAngle(distance);
         double numerator = calculatePieWedge(angle) + calculateTriangle(distance);
         return 1 - (numerator / CIRCLE_AREA);
     }
